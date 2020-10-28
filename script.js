@@ -3,21 +3,18 @@
 window.addEventListener("load", function() {
    let form = document.querySelector("form");
    form.addEventListener("submit", function(event) {
-
       let pilotName = document.querySelector("input[name=pilotName]");
       let copilotName = document.querySelector("input[name=copilotName]");
       let fuelLevel = document.querySelector("input[name=fuelLevel]");
-      let cargoMass = document.querySelector("input[name=cargoMass]");
-      
-      let letters = /^[A-Za-z\s]+$/;
+      let cargoMass = document.querySelector("input[name=cargoMass]");      
+      const letters = /^[A-Za-z\s]+$/;
          
       if (pilotName.value === "" || copilotName.value === ""||fuelLevel.value===""||cargoMass.value==="") {
          alert("All fields are required!");
          // stop the form submission
          event.preventDefault();
       }else if(!pilotName.value.match(letters)  || !copilotName.value.match(letters) ||isNaN(fuelLevel.value)||
-         isNaN(cargoMass.value))  { 
-         
+         isNaN(cargoMass.value))  {          
          alert("Make sure to enter valid information for each field");
          event.preventDefault();
       } else{
@@ -29,6 +26,7 @@ window.addEventListener("load", function() {
             document.getElementById("cargoStatus").innerHTML = "Cargo mass too high for launch"
          }else{
             document.getElementById("launchStatus").innerHTML = "Shuttle ready for launch";
+            document.getElementById("faultyItems").style.visibility ="hidden";
             document.getElementById("launchStatus").style.color = "green";
          }
       }
@@ -36,12 +34,9 @@ window.addEventListener("load", function() {
 
    let json = [];
     fetch("https://handlers.education.launchcode.org/static/planets.json").then(function(response){
-       response.json().then(function(json) {
-          console.log(json);
-          let missionTarget = document.getElementById("missionTarget");
-          
-          const target = Math.floor(Math.random() * json.length);
-          console.log(target);
+       response.json().then(function(json) {          
+          let missionTarget = document.getElementById("missionTarget");          
+          const target = Math.floor(Math.random() * json.length);          
           for(let i=0; i<json.length;i++){
             if(i === target){
                missionTarget.innerHTML += `<h2>Mission Destination</h2>
@@ -54,12 +49,9 @@ window.addEventListener("load", function() {
                </ol>
                <img src="${json[i].image}">`;
             }
-          }
-          
+          }          
        });
-      });
-     
-      
+      });           
 });
 
 function faultyItems(pilotName,copilotName){
